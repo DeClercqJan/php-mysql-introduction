@@ -1,4 +1,5 @@
 <?php
+
 require "head.php";
 require "connection.php";
 include "country_codes.php";
@@ -16,6 +17,8 @@ function endsWith($string, $endString)
     }
     return (substr($string, -$len) === $endString);
 }
+
+// TO DO if time permits: need to add session stoarge to remember password
 
 if (isset($_POST["submit"])) {
     $db = openConnection();
@@ -62,6 +65,7 @@ if (isset($_POST["submit"])) {
         }
     }
     // github and linkedin are not required fields,
+
     // TO DO IF TIME: MAKE IT WORK WITH ONLY WWW.-entry as well or just google.be for example also
     $linkedin = filter_input(INPUT_POST, 'linkedin', FILTER_SANITIZE_URL);
     $github = filter_input(INPUT_POST, 'github', FILTER_SANITIZE_URL);
@@ -70,7 +74,7 @@ if (isset($_POST["submit"])) {
         $errors["email"] = "You need to fill in your email";
     } else {
         if (filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL)) {
-            $gender = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+            $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         } else {
             $errors["email"] = "You need to fill in your you email correctly";
         }

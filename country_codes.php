@@ -1,5 +1,6 @@
 <?php 
 // stolen from https://gist.githubusercontent.com/koseki/e9715224163690df190e/raw/8687e882987016d0e4e26f4c390f44cf25886cc0/ISO639-1.txt
+// transformed it a bit 
 $iso_639_1_codes = [
 'aa',
 'ab',
