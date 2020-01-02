@@ -4,5 +4,10 @@ session_start();
 require "head.php";
 require "connection.php";
 
-// to do
+// to do:
+// On profile.php get the required user's details from the database
+// Print them out on a profile page you design, if you need inspiration, you can look here
+// Include an API call to the following API: Be Like Bill, use the documentation to understand how you need to use it, do this using either curl in PHP or ajax in Javascript. The received image (from the api) needs to be worked into the profile page somewhere.(nice to have)
+// Every column of the database table needs to be shown someway
+// The final result needs to be a coherent profile page
 ?>

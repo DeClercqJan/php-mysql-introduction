@@ -5,6 +5,9 @@ session_start();
 require "head.php";
 require "connection.php";
 
+// TO DO:
+// Now, obviously we don't want non-logged-in people to see index.php with all our data, so protect index.php so that it checks for the user's login status and redirects to login.php when not logged in.
+
 $db = openConnection();
 $sql = "SELECT id, first_name, last_name, email, preferred_language FROM student";
 $results = $db->query($sql);
