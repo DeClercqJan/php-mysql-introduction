@@ -1,5 +1,6 @@
 <?php 
 // phpinfo();
+require "head.php";
 require "connection.php";
 
 $db = openConnection();

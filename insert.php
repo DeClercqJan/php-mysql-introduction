@@ -2,27 +2,19 @@
 require "head.php";
 require "connection.php";
 
-var_dump($_POST);
-$test2 = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-echo "DIT IS TEST2: $test2";
-
- if (isset($_POST)) {
-    echo "test isset";
+ if (isset($_POST) && !empty($_POST)) {
     try {
         $test = $_POST["first_name"];
-        var_dump($test);
 
         $db = openConnection();
 
         // way learned in Het Perspectief
         $first_name = $db->quote(htmlentities($_POST["first_name"]));
-        var_dump($first_name);
 
         // way according to https://phptherightway.com/#pdo_extension + https://www.php.net/manual/en/filter.filters.sanitize.php (note: didn't researched teh filters well, but chose on the basis of the name)
         $last_name = filter_input(INPUT_POST, 'last_name', FILTER_SANITIZE_STRING);
-        var_dump($last_name);
         $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-        // $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_STRING);
+        $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_STRING);
         $linkedin = filter_input(INPUT_POST, 'linkedin', FILTER_SANITIZE_URL);
         $github = filter_input(INPUT_POST, 'github', FILTER_SANITIZE_URL);
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -32,9 +24,6 @@ echo "DIT IS TEST2: $test2";
         $quote = filter_input(INPUT_POST, 'quote', FILTER_SANITIZE_STRING);
         $quote_author = filter_input(INPUT_POST, 'quote_author', FILTER_SANITIZE_STRING);
 
-        // $sql = "INSERT INTO student (first_name, last_name, username, gender, linkedin, github, email, preferred_language, avatar, video, quote, quote_author) VALUES (:first_name, :last_name, :username, :gender, :linkedin, :github, :email, :preferred_language, :avatar, :video, :quote, :quote_author)";
-        // $sql = "INSERT INTO student (first_name, last_name) VALUES (:first_name, :last_name)";
-        //$sql = "INSERT INTO student (first_name, last_name, username, gender, linkedin, github, email, preferred_language, avatar, video, quote, quote_author) VALUES (:first_name, :last_name, '', 'mannetje', '', '', '', '', '', '', '', '')";
         $sql = "INSERT INTO student (first_name, last_name, gender, linkedin, github, email, preferred_language, avatar, video, quote, quote_author) VALUES (:first_name, :last_name, :gender, :linkedin, :github, :email, :preferred_language, :avatar, :video, :quote, :quote_author)";
         // NOTE: $db repplaces more common $dpo
         $stmt = $db->prepare($sql);
@@ -57,8 +46,9 @@ echo "DIT IS TEST2: $test2";
         
         $stmt->execute();
         // NOTE: $db repplaces more common $dpo
-        $insert_id = $db->lastInsertId();
-        echo "Id of the last added record is: " . $insert_id;
+        // $insert_id = $db->lastInsertId();
+        //echo "Id of the last added record is: " . $insert_id;
+        echo "Congratulations, $first_name. You've succesfully registered";
     } catch (PDOException $e) {
         echo '<pre>';
         echo 'Line: ' . $e -> getLine() . '<br>';
@@ -67,6 +57,10 @@ echo "DIT IS TEST2: $test2";
         echo '</pre>';
     } 
  }
+ else {
+    echo "Please enter your data to register";
+ }
+
 ?>
 <article>
     <h2>Register</h2>
