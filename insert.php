@@ -3,6 +3,53 @@ require "head.php";
 require "connection.php";
 
 var_dump($_POST);
+
+if (isset($_POST)) {
+    $test = $_POST["first_name"];
+    var_dump($test);
+
+    $db = openConnection();
+
+    // way learned in Het Perspectief
+    $first_name = $db->quote(htmlentities($_POST["first_name"]));
+    var_dump($first_name);
+
+    // way according to https://phptherightway.com/#pdo_extension + https://www.php.net/manual/en/filter.filters.sanitize.php (note: didn't researched teh filters well, but chose on the basis of the name)
+    $last_name = filter_input(INPUT_POST, 'last_name', FILTER_SANITIZE_STRING);
+    var_dump($last_name);
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+    $gender = filter_input(INPUT_POST, 'gender', FILTER_SANITIZE_STRING);
+    $linkedin = filter_input(INPUT_POST, 'linkedin', FILTER_SANITIZE_URL);
+    $github = filter_input(INPUT_POST, 'github', FILTER_SANITIZE_URL);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $preferred_language = filter_input(INPUT_POST, 'preferred_language', FILTER_SANITIZE_STRING);
+    $avatar = filter_input(INPUT_POST, 'avatar', FILTER_SANITIZE_URL);
+    $video = filter_input(INPUT_POST, 'video', FILTER_SANITIZE_URL);
+    $quote = filter_input(INPUT_POST, 'quote', FILTER_SANITIZE_STRING);
+    $quote_author = filter_input(INPUT_POST, 'quote_author', FILTER_SANITIZE_STRING);
+
+    $sql = "INSERT INTO student (first_name, last_name, username, gender, linkedin, github, email, preferred_language, avatar, video, quote, quote_author) VALUES (:first_name, :last_name, :username, :gender, :linkedin, :github, :email, :preferred_language, :avatar, :video, :quote, :quote_author)";
+
+    $stmt = $pdo->prepare($qsl);
+
+    $stmt->bindParam(':first_name', $first_name, PDO::PARAM_STR);
+    $stmt->bindParam(':last_name', $last_name, PDO::PARAM_STR);
+    $stmt->bindParam(':gender', $gender, PDO::PARAM_STR);
+    $stmt->bindParam(':linkedin', $linkedin, PDO::PARAM_STR);
+    $stmt->bindParam(':github', $github, PDO::PARAM_STR);
+    $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    $stmt->bindParam(':preferred_language', $preferred_language, PDO::PARAM_STR);
+    $stmt->bindParam(':avatar', $avatar, PDO::PARAM_STR);
+    $stmt->bindParam(':video', $video, PDO::PARAM_STR);
+    $stmt->bindParam(':quote', $quote, PDO::PARAM_STR);
+    $stmt->bindParam(':quote_author', $quote_author, PDO::PARAM_STR);
+
+    // $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT); // <-- filter your data first (see [Data Filtering](#data_filtering)), especially important for INSERT, UPDATE, etc.
+    // $stmt->bindParam(':id', $id, PDO::PARAM_INT); // <-- Automatically sanitized for SQL by PDO
+    $stmt->execute();
+}
+
+
 ?>
 <article>
     <h2>Register</h2>
