@@ -217,7 +217,9 @@ if (isset($_POST["submit_register"])) {
             echo "Id of the last added record is: " . $id;
             // echo "Congratulations, $username. You've succesfully registered";
             $_SESSION["status_registration"] = "succesful registration";
-            header("Location: profile.php?user=$id.php");
+            $_SESSION["status_login"] = "succesful login";;
+            $_SESSION["id"] = $id;
+            header("Location: profile.php?user=$id");
         } catch (PDOException $e) {
             echo '<pre>';
             echo 'Line: ' . $e->getLine() . '<br>';

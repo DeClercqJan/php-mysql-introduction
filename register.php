@@ -31,8 +31,6 @@ if (!empty($_SESSION["errors"])) {
 //     $_SESSION["status_registration"] = "";
 // }
 
-
-
 ?>
 <article>
     <h2>Register</h2>

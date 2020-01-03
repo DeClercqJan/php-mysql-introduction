@@ -29,6 +29,8 @@ if (!empty($_SESSION["errors"])) {
 
 
 ?>
+<article>
+    <h2>Login</h2>
 <form action="auth.php" method="POST">
     <label for="username">Username</label>
     <input type="text" name="username" id="username" <?php if (isset($_SESSION["username"])) {
@@ -39,7 +41,7 @@ if (!empty($_SESSION["errors"])) {
     <input type="password" name="password" id="password"></br>
     <input type="submit" name="submit_login" value="login" id="submit_login">
 </form>
+<p>Or <a href="register.php">register</a></p>
+</article>
 <?php
-//TO DO:
-// Create a login.php file and fill it up with a login form (email/password or username/password)
 ?>
