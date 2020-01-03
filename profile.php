@@ -4,6 +4,11 @@ session_start();
 require "head.php";
 require "connection.php";
 
+var_dump($_POST);
+echo "</br>";
+var_dump($_SESSION);
+echo "</br>";
+
 // note: other registration statusses on register.php
 if (isset($_SESSION["status_registration"]) && $_SESSION["status_registration"] == "succesful registration") {
     echo $_SESSION["status_registration"];

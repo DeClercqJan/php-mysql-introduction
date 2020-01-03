@@ -4,16 +4,29 @@ session_start();
 require "head.php";
 require "connection.php";
 
-// var_dump($_SESSION);
+var_dump($_POST);
+echo "</br>";
+var_dump($_SESSION);
+echo "</br>";
 
-
-// TO DO AFTER BREAK: DISPLAY LOGIN STATUS MESSAGES
+if (isset($_SESSION["status_login"]) && $_SESSION["status_login"] == "no login started") {
+    echo $_SESSION["status_login"] . "</br>";
+    echo "Please fill in the form below to login </br>";
+} elseif (isset($_SESSION["status_login"]) && $_SESSION["status_login"] == "login started, but incomplete") {
+    echo $_SESSION["status_login"] . "</br>";
+} elseif (!isset($_POST["submit_login"])) {
+    if (isset($_SESSION["status_login"]) && $_SESSION["status_login"] == "succesful login") {
+    } else {
+        echo "Please fill in the form below to login </br>";
+    }
+}
 
 if (!empty($_SESSION["errors"])) {
     foreach ($_SESSION["errors"] as $error) {
         echo $error . "</br>";
     }
 }
+
 
 ?>
 <form action="auth.php" method="POST">

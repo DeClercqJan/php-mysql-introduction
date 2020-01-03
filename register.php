@@ -5,6 +5,11 @@ session_start();
 require "head.php";
 require "connection.php";
 
+var_dump($_POST);
+echo "</br>";
+var_dump($_SESSION);
+echo "</br>";
+
 if(!isset($_POST["submit_register"]) || isset($_SESSION["status_registration"]) && $_SESSION["status_registration"] == "no registration started") {
     // echo $_SESSION["status_registration"] . "</br>";
     echo "Please fill in the form below to register </br>";

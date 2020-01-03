@@ -6,7 +6,9 @@ require "head.php";
 require "connection.php";
 
 var_dump($_POST);
-// var_dump($_SESSION);
+echo "</br>";
+var_dump($_SESSION);
+echo "</br>";
 
 // to do:
 // ? If the registration fails, go back to the previous form, fill in all the previously filled in data (except the passwords) and show an error on the correct field
@@ -231,10 +233,24 @@ if (isset($_POST["submit_register"])) {
 
 // LOGIN 
 if (isset($_POST["submit_login"])) {
-    echo "test login";
+    // echo "test login";
     $db = openConnection();
 
     if (empty($_POST["username"])) {
+        $errors["username"] = "You need to fill in your username";
+    } else {
+        $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+        $_SESSION["username"] = $username;
+    }
+
+    if (empty($_POST["password"])) {
+        $errors["password"] = "You need to fill in a password";
+    } else {
+        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+    }
+
+    // If not, go back to the login page, giving an error (WATCH OUT: never say whether the password or the username/email was incorrect, always say either one of them could be wrong)
+    /*     if (empty($_POST["username"])) {
         $errors["username"] = "You need to fill in your username";
     } else {
         if (filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING)) {
@@ -256,11 +272,11 @@ if (isset($_POST["submit_login"])) {
             $errors["password"] = "You need to fill in your you password correctly";
         }
     }
-
+*/
     $_SESSION["errors"] = $errors;
 
     if (empty($_SESSION["errors"])) {
-        echo "no form errors login";
+        // echo "no form errors login";
         try {
             $sql = "SELECT password, id FROM student WHERE username = :username";
             // NOTE: $db repplaces more common $dpo
@@ -274,11 +290,19 @@ if (isset($_POST["submit_login"])) {
                 $_SESSION["id"] = $id;
                 // echo "Congratulations, $username. You've succesfully logged in";
                 $_SESSION["status_login"] = "succesful login";
+                $_SESSION["first_load_after_login"] = true;
                 header("Location: index.php");
             } else {
-                $errors["password"] = "you've entered the wrong password, please try again";
-                $_SESSION["errors"] = $errors;
+                // echo "test else";
+                //                If not, go back to the login page, giving an error (WATCH OUT: never say whether the password or the username/email was incorrect, always say either one of them could be wrong)
+                /*                 $errors["password"] = "you've entered the wrong password, please try again";
+                $_SESSION["errors"] = $errors; 
+            $_SESSION["status_login"] = "login started, but incomplete";
+            header("Location: login.php");
+            */
                 $_SESSION["status_login"] = "login started, but incomplete";
+                $errors["username_or_password"] = "Either the password or the username were incorrect";
+                $_SESSION["errors"] = $errors;
                 header("Location: login.php");
             }
         } catch (PDOException $e) {
@@ -288,8 +312,7 @@ if (isset($_POST["submit_login"])) {
             echo 'Errormessage: ' . $e->getMessage() . '<br>';
             echo '</pre>';
         }
-    }
-    elseif (!empty($_SESSION["errors"])) {
+    } elseif (!empty($_SESSION["errors"])) {
         $_SESSION["status_login"] = "login started, but incomplete";
         header("Location: login.php");
     }
@@ -304,11 +327,14 @@ elseif (!isset($_POST["submit_register"]) && empty($_SESSION["errors"])) {
 } elseif (!isset($_POST["submit_register"]) && !empty($_SESSION["errors"])) {
     $_SESSION["status_registration"] = "registration started, but incomplete";
     header("Location: register.php");
-} elseif (!isset($_POST["submit_login"]) && empty($_SESSION["errors"])) {
+}
+
+/* WHY? somehow this fired after succesful log in ... while it was added to database and while it was also followed by a correct redirect ... 
+elseif (!isset($_POST["submit_login"]) && empty($_SESSION["errors"])) {
     $_SESSION["status_login"] = "no login started";
-    echo "Please enter your data to login";
     header("Location: login.php");
-} elseif (!isset($_POST["submit_login"]) && !empty($_SESSION["errors"])) {
+} 
+*/ elseif (!isset($_POST["submit_login"]) && !empty($_SESSION["errors"])) {
     $_SESSION["status_login"] = "login started, but incomplete";
     header("Location: register.php");
 }
