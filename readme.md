@@ -5,6 +5,9 @@
 - becode PHP/mysql exercise
 
 ## implementation
+- PDO
+- form validation, sanitization
+- separate auth.php file that is not in the clickable pages
 - database not included in files
 
 ## to do's
