@@ -18,7 +18,8 @@ function endsWith($string, $endString)
     return (substr($string, -$len) === $endString);
 }
 
-if (isset($_POST["submit"])) {
+// question to myself: do I need to change the names of username, also in session etc. to prevent confusion between the login username and pasword? Username is not important and even handy if it's remembered, pasword I don't store
+if (isset($_POST["submit_register"])) {
     $db = openConnection();
 
     // validation: probably some cases will never fire, but it's more standardized this way. Also, probably more safe this way
@@ -62,7 +63,7 @@ if (isset($_POST["submit"])) {
     } else {
         if (filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING)) {
             $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-            // note storing password in session!
+            // not storing password in session!
         } else {
             $errors["password"] = "You need to fill in your you password correctly";
         }
@@ -72,7 +73,7 @@ if (isset($_POST["submit"])) {
     } else {
         if (filter_input(INPUT_POST, 'password_confirmation', FILTER_SANITIZE_STRING)) {
             $password_confirmation = filter_input(INPUT_POST, 'password_confirmation', FILTER_SANITIZE_STRING);
-            // note storing password in session!
+            // not storing password in session!
         } else {
             $errors["password_confirmation"] = "You need to fill in the password correctly a second time";
         }
@@ -104,7 +105,9 @@ if (isset($_POST["submit"])) {
 
     // TO DO IF TIME: MAKE IT WORK WITH ONLY WWW.-entry as well or just google.be for example also
     $linkedin = filter_input(INPUT_POST, 'linkedin', FILTER_SANITIZE_URL);
+    $_SESSION["linkedin"] = $linkedin;    
     $github = filter_input(INPUT_POST, 'github', FILTER_SANITIZE_URL);
+    $_SESSION["github"] = $github;    
 
     if (empty($_POST["email"])) {
         $errors["email"] = "You need to fill in your email";
@@ -152,16 +155,16 @@ if (isset($_POST["submit"])) {
 
     // no validation for quote nor for quote_author
 
+    $quote = filter_input(INPUT_POST, 'quote', FILTER_SANITIZE_STRING);
+    $_SESSION["quote"] = $quote;    
+    $quote_author = filter_input(INPUT_POST, 'quote_author', FILTER_SANITIZE_STRING);
+    $_SESSION["quote_author"] = $quote_author;
+
     $_SESSION["errors"] = $errors;
 
     if (empty($errors)) {
 
         try {
-
-            $quote = filter_input(INPUT_POST, 'quote', FILTER_SANITIZE_STRING);
-            $_SESSION["quote"] = $quote;
-            $quote_author = filter_input(INPUT_POST, 'quote_author', FILTER_SANITIZE_STRING);
-            $_SESSION["quote_author"] = $quote_author;
 
             $sql = "INSERT INTO student (first_name, last_name, password, gender, linkedin, github, email, preferred_language, avatar, video, quote, quote_author) VALUES (:first_name, :last_name, :password, :gender, :linkedin, :github, :email, :preferred_language, :avatar, :video, :quote, :quote_author)";
             // NOTE: $db repplaces more common $dpo
@@ -278,7 +281,7 @@ if (!empty($_SESSION["errors"])) {
         <input type="text" name="quote_author" id="quote_author" <?php if (isset($_SESSION["quote_author"])) {
                                                                         echo "value=" . $_SESSION["quote_author"];
                                                                     } ?>></br>
-        <input type="submit" name="submit" value="register!" id="submit">
+        <input type="submit" name="submit_register" value="register!" id="submit_register">
     </form>
 </article>
 <?php

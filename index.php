@@ -8,6 +8,9 @@ require "connection.php";
 // TO DO:
 // Now, obviously we don't want non-logged-in people to see index.php with all our data, so protect index.php so that it checks for the user's login status and redirects to login.php when not logged in.
 
+// HOW LINK LANGUAGE AND COUNTRY? Their preferred language (in the form of an icon (flag)) 
+
+
 $db = openConnection();
 $sql = "SELECT id, first_name, last_name, email, preferred_language FROM student";
 $results = $db->query($sql);
@@ -38,6 +41,5 @@ $results = $db->query($sql);
 <?php
 
 
-// HOW LINK LANGUAGE AND COUNTRY? Their preferred language (in the form of an icon (flag)) 
 
 ?>

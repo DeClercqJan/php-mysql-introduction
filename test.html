@@ -8,6 +8,15 @@
     <link href="./CSS/style.css" rel="stylesheet">
 </head>
 <body>
-    
+    <form action="auth.php" method="POST">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" <?php if (isset($_SESSION["username"])) {
+                                                                echo "value=" . $_SESSION["username"];
+                                                            } ?>></br>
+        <!-- NOTE: don't store password in session -->
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password"></br>
+        <input type="submit" name="submit_login" value="login" id="submit_login">
+    </form>
 </body>
 </html>
