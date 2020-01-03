@@ -9,20 +9,13 @@ var_dump($_POST);
 // var_dump($_SESSION);
 
 // to do:
-// Create an auth.php file and write both the login and registration logic in them
-// 1) The registration logic should: 
-// move stuff from register.php here
-// If the registration fails, go back to the previous form, fill in all the previously filled in data (except the passwords) and show an error on the correct field
+// ? If the registration fails, go back to the previous form, fill in all the previously filled in data (except the passwords) and show an error on the correct field
 // If the registration succeeds, go to profile.php and show the user's own profile.
 // 2) The login logic should: 
 // Check if the filled in username / email can be found on a user with that credential
-// tip aan mezelf: kijk naar https://github.com/DeClercqJan/fietroute.org-member-rated-cycling-routes-per-province
-// Check if the hashed database password, can be matched to the newly hashed (filled in) password
 // If not, go back to the login page, giving an error 
 // WATCH OUT: never say whether the password or the username/email was incorrect, always say either one of them could be wrong)
 // If it's correct, move to the index.php page
-
-
 
 $errors = [];
 // QUESTION: is it dangerous to place this here?
@@ -41,12 +34,9 @@ function endsWith($string, $endString)
     return (substr($string, -$len) === $endString);
 }
 
-if (!isset($_POST["submit_register"])) {
-    $_SESSION["status_registration"] = "no registration started";
-    header("Location: register.php");
-}
+// TO DO: create separate error arrays for login and registration errors as it's theoretically possible, I think, that people receive the wrong messages as these things are remembered
 // QUESTION: do I need to change the names of username, also in session etc. to prevent confusion between the login username and pasword? Username is not important and even handy if it's remembered, pasword I don't store
-elseif (isset($_POST["submit_register"])) {
+if (isset($_POST["submit_register"])) {
     echo "test isset submit register start proces";
     // validation: probably some cases will never fire, but it's more standardized this way. Also, probably more safe this way
     if (empty($_POST["first_name"])) {
@@ -159,7 +149,7 @@ elseif (isset($_POST["submit_register"])) {
         }
     }
 
-        // TO DO IF TIME: MAKE IT WORK WITH ONLY WWW.-entry as well or just google.be for example also
+    // TO DO IF TIME: MAKE IT WORK WITH ONLY WWW.-entry as well or just google.be for example also
     if (empty($_POST["avatar"])) {
         $errors["avatar"] = "You need to fill in your avatar";
     } else {
@@ -192,51 +182,51 @@ elseif (isset($_POST["submit_register"])) {
     $_SESSION["quote_author"] = $quote_author;
 
     $_SESSION["errors"] = $errors;
-}
 
-if (isset($_POST["submit_register"]) && empty($_SESSION["errors"])) {
-    echo "will try to connect to db";
-    try {
+    if (empty($_SESSION["errors"])) {
+        echo "will try to connect to db";
+        try {
 
-        $sql = "INSERT INTO student (first_name, last_name, username, password, gender, linkedin, github, email, preferred_language, avatar, video, quote, quote_author) VALUES (:first_name, :last_name, :username, :password, :gender, :linkedin, :github, :email, :preferred_language, :avatar, :video, :quote, :quote_author)";
-        // NOTE: $db repplaces more common $dpo
-        $stmt = $db->prepare($sql);
+            $sql = "INSERT INTO student (first_name, last_name, username, password, gender, linkedin, github, email, preferred_language, avatar, video, quote, quote_author) VALUES (:first_name, :last_name, :username, :password, :gender, :linkedin, :github, :email, :preferred_language, :avatar, :video, :quote, :quote_author)";
+            // NOTE: $db repplaces more common $dpo
+            $stmt = $db->prepare($sql);
 
-        //$stmt->bindParam(':first_name', $first_name, PDO::PARAM_STR);
-        $stmt->bindValue(':first_name', $first_name, PDO::PARAM_STR);
-        $stmt->bindValue(':last_name', $last_name, PDO::PARAM_STR);
-        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
-        $stmt->bindValue(':password', $password_safe, PDO::PARAM_STR);
-        $stmt->bindValue(':gender', $gender, PDO::PARAM_STR);
-        $stmt->bindValue(':linkedin', $linkedin, PDO::PARAM_STR);
-        $stmt->bindValue(':github', $github, PDO::PARAM_STR);
-        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
-        $stmt->bindValue(':preferred_language', $preferred_language, PDO::PARAM_STR);
-        $stmt->bindValue(':avatar', $avatar, PDO::PARAM_STR);
-        $stmt->bindValue(':video', $video, PDO::PARAM_STR);
-        $stmt->bindValue(':quote', $quote, PDO::PARAM_STR);
-        $stmt->bindValue(':quote_author', $quote_author, PDO::PARAM_STR);
+            //$stmt->bindParam(':first_name', $first_name, PDO::PARAM_STR);
+            $stmt->bindValue(':first_name', $first_name, PDO::PARAM_STR);
+            $stmt->bindValue(':last_name', $last_name, PDO::PARAM_STR);
+            $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+            $stmt->bindValue(':password', $password_safe, PDO::PARAM_STR);
+            $stmt->bindValue(':gender', $gender, PDO::PARAM_STR);
+            $stmt->bindValue(':linkedin', $linkedin, PDO::PARAM_STR);
+            $stmt->bindValue(':github', $github, PDO::PARAM_STR);
+            $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+            $stmt->bindValue(':preferred_language', $preferred_language, PDO::PARAM_STR);
+            $stmt->bindValue(':avatar', $avatar, PDO::PARAM_STR);
+            $stmt->bindValue(':video', $video, PDO::PARAM_STR);
+            $stmt->bindValue(':quote', $quote, PDO::PARAM_STR);
+            $stmt->bindValue(':quote_author', $quote_author, PDO::PARAM_STR);
 
-        // $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT); // <-- filter your data first (see [Data Filtering](#data_filtering)), especially important for INSERT, UPDATE, etc.
-        // $stmt->bindParam(':id', $id, PDO::PARAM_INT); // <-- Automatically sanitized for SQL by PDO
+            // $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT); // <-- filter your data first (see [Data Filtering](#data_filtering)), especially important for INSERT, UPDATE, etc.
+            // $stmt->bindParam(':id', $id, PDO::PARAM_INT); // <-- Automatically sanitized for SQL by PDO
 
-        $stmt->execute();
-        // NOTE: $db repplaces more common $dpo
-        $id = $db->lastInsertId();
-        echo "Id of the last added record is: " . $id;
-        // echo "Congratulations, $username. You've succesfully registered";
-        $_SESSION["status_registration"] = "succesful registration";
-        header("Location: profile.php?user=$id.php");
-    } catch (PDOException $e) {
-        echo '<pre>';
-        echo 'Line: ' . $e->getLine() . '<br>';
-        echo 'File: ' . $e->getFile() . '<br>';
-        echo 'Errormessage: ' . $e->getMessage() . '<br>';
-        echo '</pre>';
+            $stmt->execute();
+            // NOTE: $db repplaces more common $dpo
+            $id = $db->lastInsertId();
+            echo "Id of the last added record is: " . $id;
+            // echo "Congratulations, $username. You've succesfully registered";
+            $_SESSION["status_registration"] = "succesful registration";
+            header("Location: profile.php?user=$id.php");
+        } catch (PDOException $e) {
+            echo '<pre>';
+            echo 'Line: ' . $e->getLine() . '<br>';
+            echo 'File: ' . $e->getFile() . '<br>';
+            echo 'Errormessage: ' . $e->getMessage() . '<br>';
+            echo '</pre>';
+        }
+    } elseif (!empty($_SESSION["errors"])) {
+        $_SESSION["status_registration"] = "registration started, but incomplete";
+        header("Location: register.php");
     }
-} elseif (isset($_POST["submit_register"]) && !empty($_SESSION["errors"])) {
-    $_SESSION["status_registration"] = "registration started, but incomplete";
-    header("Location: register.php");
 }
 
 // LOGIN 
@@ -269,8 +259,8 @@ if (isset($_POST["submit_login"])) {
 
     $_SESSION["errors"] = $errors;
 
-    if (empty($errors)) {
-        echo "no errors";
+    if (empty($_SESSION["errors"])) {
+        echo "no form errors login";
         try {
             $sql = "SELECT password, id FROM student WHERE username = :username";
             // NOTE: $db repplaces more common $dpo
@@ -281,13 +271,15 @@ if (isset($_POST["submit_login"])) {
             $password_hashed = $row["password"];
             $id = $row["id"];
             if (password_verify($password, $password_hashed)) {
-                echo "Congratulations, $username. You've succesfully logged in";
                 $_SESSION["id"] = $id;
-                // header("Location: zoeken.php");
+                // echo "Congratulations, $username. You've succesfully logged in";
+                $_SESSION["status_login"] = "succesful login";
+                header("Location: index.php");
             } else {
-
-                //echo "<p>er is een fout bij het aanmelden</p>";
-                //echo "<a href='aanmelden.php'>Terug naar de pagina aanmelden</a>";
+                $errors["password"] = "you've entered the wrong password, please try again";
+                $_SESSION["errors"] = $errors;
+                $_SESSION["status_login"] = "login started, but incomplete";
+                header("Location: login.php");
             }
         } catch (PDOException $e) {
             echo '<pre>';
@@ -297,6 +289,26 @@ if (isset($_POST["submit_login"])) {
             echo '</pre>';
         }
     }
-} elseif (!isset($_POST["submit_login"]) && empty($_SESSION)) {
+    elseif (!empty($_SESSION["errors"])) {
+        $_SESSION["status_login"] = "login started, but incomplete";
+        header("Location: login.php");
+    }
+}
+
+// note: I put this here, to allow both registration or login processes to run
+// TO DO if time: improve error messages as people can theoretically land on auth.php both as a new user or as a returneding, already registeed user and then they need to have the option to go to register.php or to login .php
+// what happens now is that the first thing that is returned as true, is run (registration in this case)
+elseif (!isset($_POST["submit_register"]) && empty($_SESSION["errors"])) {
+    $_SESSION["status_registration"] = "no registration started";
+    header("Location: register.php");
+} elseif (!isset($_POST["submit_register"]) && !empty($_SESSION["errors"])) {
+    $_SESSION["status_registration"] = "registration started, but incomplete";
+    header("Location: register.php");
+} elseif (!isset($_POST["submit_login"]) && empty($_SESSION["errors"])) {
+    $_SESSION["status_login"] = "no login started";
     echo "Please enter your data to login";
+    header("Location: login.php");
+} elseif (!isset($_POST["submit_login"]) && !empty($_SESSION["errors"])) {
+    $_SESSION["status_login"] = "login started, but incomplete";
+    header("Location: register.php");
 }

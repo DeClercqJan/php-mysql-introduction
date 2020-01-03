@@ -4,6 +4,11 @@ session_start();
 require "head.php";
 require "connection.php";
 
+// var_dump($_SESSION);
+
+
+// TO DO AFTER BREAK: DISPLAY LOGIN STATUS MESSAGES
+
 if (!empty($_SESSION["errors"])) {
     foreach ($_SESSION["errors"] as $error) {
         echo $error . "</br>";

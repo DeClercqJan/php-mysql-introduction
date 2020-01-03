@@ -17,3 +17,5 @@ if (isset($_SESSION["status_registration"]) && $_SESSION["status_registration"] 
 // Include an API call to the following API: Be Like Bill, use the documentation to understand how you need to use it, do this using either curl in PHP or ajax in Javascript. The received image (from the api) needs to be worked into the profile page somewhere.(nice to have)
 // Every column of the database table needs to be shown someway
 // The final result needs to be a coherent profile page
+
+// to do: , maar eerst wel nog eens kijke nnaar opdracht: als je naar profile.php gaat zomaar, wat dan?
