@@ -166,13 +166,14 @@ if (isset($_POST["submit_register"])) {
 
         try {
 
-            $sql = "INSERT INTO student (first_name, last_name, password, gender, linkedin, github, email, preferred_language, avatar, video, quote, quote_author) VALUES (:first_name, :last_name, :password, :gender, :linkedin, :github, :email, :preferred_language, :avatar, :video, :quote, :quote_author)";
+            $sql = "INSERT INTO student (first_name, last_name, username, password, gender, linkedin, github, email, preferred_language, avatar, video, quote, quote_author) VALUES (:first_name, :last_name, :username, :password, :gender, :linkedin, :github, :email, :preferred_language, :avatar, :video, :quote, :quote_author)";
             // NOTE: $db repplaces more common $dpo
             $stmt = $db->prepare($sql);
 
             //$stmt->bindParam(':first_name', $first_name, PDO::PARAM_STR);
             $stmt->bindValue(':first_name', $first_name, PDO::PARAM_STR);
             $stmt->bindValue(':last_name', $last_name, PDO::PARAM_STR);
+            $stmt->bindValue(':username', $username, PDO::PARAM_STR);
             $stmt->bindValue(':password', $password_safe, PDO::PARAM_STR);
             $stmt->bindValue(':gender', $gender, PDO::PARAM_STR);
             $stmt->bindValue(':linkedin', $linkedin, PDO::PARAM_STR);
