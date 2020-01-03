@@ -1,7 +1,8 @@
 # php-mysql-introduction
 
 ## basic idea
-
+- register, login, get to see list of members, see their data and be able to delete your own
+- becode PHP/mysql exercise
 
 ## implementation
 - database not included in files
