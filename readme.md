@@ -11,7 +11,8 @@
 - scenario' testing, routing ... (refreshes etc.)
 - styling
 - there are some to do's in the files themselves
-- reset password functionality with mail client
+- reset password functionality with mail client would be nice
+- deploy it live
 
 # ORIGINAL ASSIGNMENT BELOW
 
