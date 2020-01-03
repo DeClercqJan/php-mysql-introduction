@@ -10,7 +10,6 @@ require "connection.php";
 
 // HOW LINK LANGUAGE AND COUNTRY? Their preferred language (in the form of an icon (flag)) 
 
-
 $db = openConnection();
 $sql = "SELECT id, first_name, last_name, email, preferred_language FROM student";
 $results = $db->query($sql);
