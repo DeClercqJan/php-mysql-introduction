@@ -1,3 +1,19 @@
+# php-mysql-introduction
+
+## basic idea
+
+
+## implementation
+- database not included in files
+
+## to do's
+- scenario' testing, routing ... (refreshes etc.)
+- styling
+- there are some to do's in the files themselves
+- reset password functionality with mail client
+
+# ORIGINAL ASSIGNMENT BELOW
+
 # Challenge: MySQL
 
 - Repository: `php-mysql-introduction`
