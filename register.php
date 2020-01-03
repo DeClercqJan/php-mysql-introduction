@@ -5,12 +5,18 @@ session_start();
 require "head.php";
 require "connection.php";
 
-if (isset($_SESSION["status_registration"]) && $_SESSION["status_registration"] == "registration_started") {
-    echo "registration started </br>";
-    if (!empty($_SESSION["errors"])) {
-        foreach ($_SESSION["errors"] as $error) {
-            echo $error . "</br>";
-        }
+if(!isset($_POST["submit_register"]) || isset($_SESSION["status_registration"]) && $_SESSION["status_registration"] == "no registration started") {
+    // echo $_SESSION["status_registration"] . "</br>";
+    echo "Please fill in the form below to register </br>";
+}
+elseif(isset($_SESSION["status_registration"]) && $_SESSION["status_registration"] == "registration started, but incomplete") {
+    echo $_SESSION["status_registration"] . "</br>";
+
+}
+
+if (!empty($_SESSION["errors"])) {
+    foreach ($_SESSION["errors"] as $error) {
+        echo $error . "</br>";
     }
 }
 

@@ -4,7 +4,8 @@ session_start();
 require "head.php";
 require "connection.php";
 
-if(isset($_SESSION["status_registration"]) && $_SESSION["status_registration"] == "succesful_registration") {
+// note: other registration statusses on register.php
+if (isset($_SESSION["status_registration"]) && $_SESSION["status_registration"] == "succesful registration") {
     echo $_SESSION["status_registration"];
     // to do: check if there are more things that need to be reset
     $_SESSION["status_registration"] = "";

@@ -25,6 +25,8 @@ var_dump($_POST);
 
 
 $errors = [];
+// QUESTION: is it dangerous to place this here?
+$db = openConnection();
 
 // REGISTRATION
 include "country_codes.php";
@@ -39,11 +41,13 @@ function endsWith($string, $endString)
     return (substr($string, -$len) === $endString);
 }
 
-// question to myself: do I need to change the names of username, also in session etc. to prevent confusion between the login username and pasword? Username is not important and even handy if it's remembered, pasword I don't store
-if (isset($_POST["submit_register"])) {
+if (!isset($_POST["submit_register"])) {
+    $_SESSION["status_registration"] = "no registration started";
+    header("Location: register.php");
+}
+// QUESTION: do I need to change the names of username, also in session etc. to prevent confusion between the login username and pasword? Username is not important and even handy if it's remembered, pasword I don't store
+elseif (isset($_POST["submit_register"])) {
     echo "test isset submit register start proces";
-    $db = openConnection();
-
     // validation: probably some cases will never fire, but it's more standardized this way. Also, probably more safe this way
     if (empty($_POST["first_name"])) {
         $errors["first_name"] = "You need to fill in your first name";
@@ -155,6 +159,7 @@ if (isset($_POST["submit_register"])) {
         }
     }
 
+        // TO DO IF TIME: MAKE IT WORK WITH ONLY WWW.-entry as well or just google.be for example also
     if (empty($_POST["avatar"])) {
         $errors["avatar"] = "You need to fill in your avatar";
     } else {
@@ -220,7 +225,7 @@ if (isset($_POST["submit_register"]) && empty($_SESSION["errors"])) {
         $id = $db->lastInsertId();
         echo "Id of the last added record is: " . $id;
         // echo "Congratulations, $username. You've succesfully registered";
-        $_SESSION["status_registration"] = "succesful_registration";
+        $_SESSION["status_registration"] = "succesful registration";
         header("Location: profile.php?user=$id.php");
     } catch (PDOException $e) {
         echo '<pre>';
@@ -229,12 +234,8 @@ if (isset($_POST["submit_register"]) && empty($_SESSION["errors"])) {
         echo 'Errormessage: ' . $e->getMessage() . '<br>';
         echo '</pre>';
     }
-} 
-elseif (isset($_POST["submit_register"]) && !empty($_SESSION)) {
-    $_SESSION["status_registration"] = "registration_started";
-    header("Location: register.php");
-} elseif (!isset($_POST["submit_register"]) && empty($_SESSION)) {
-    $_SESSION["status_registration"] = "no_registration_started";
+} elseif (isset($_POST["submit_register"]) && !empty($_SESSION["errors"])) {
+    $_SESSION["status_registration"] = "registration started, but incomplete";
     header("Location: register.php");
 }
 
